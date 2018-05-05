@@ -1,0 +1,59 @@
+{
+  "settings": {
+    "index": {
+      "refresh_interval": "-1",
+      "number_of_shards": "1",
+      "provided_name": "posts",
+
+      "number_of_replicas": "0"
+
+    }
+  },
+  "mappings": {
+    "post": {
+      "properties": {
+        "creator": {
+          "type": "text"
+        },
+        "created": {
+          "format": "basic_date_time",
+          "type": "date"
+        },
+        "upvoters": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 256,
+              "type": "keyword"
+            }
+          }
+        },
+        "rating": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "text"
+        },
+        "lastModified": {
+          "format": "basic_date_time",
+          "type": "date"
+        },
+        "text": {
+          "type": "text"
+        },
+        "title": {
+          "type": "text"
+        },
+        "downvoters": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "ignore_above": 256,
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}
