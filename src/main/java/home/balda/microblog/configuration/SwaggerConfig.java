@@ -33,7 +33,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport{
                 "Some custom description of API.",
                 "Initial",
                 "Very Open Source",
-                new Contact("Katia Berner", "https://www.linkedin.com/in/kberner/", "4katy.berner@gmail.com"),
+                new Contact("Katia Berner", "https://www.linkedin.com/in/kberner/", "baldaa@gmail.com"),
                 "License of API", "API license URL", Collections.emptyList());
     }
     @Override
