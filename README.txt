@@ -32,7 +32,7 @@ Implementation report:
 Implemented as Spring-boot application with spring-data and swagger2 enabled.
 Elasticsearch as persistent.
 
-Prerequisites:
+Runtime dependencies:
     Elasticsearch cluster (application will create it's index automatically).
     Apache Maven 3.
     Java 1.8
