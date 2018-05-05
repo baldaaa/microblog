@@ -44,7 +44,7 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void echo() throws Exception {
+    public void testEcho() throws Exception {
 
         //GIVEN
         PostRequest post  = new PostRequest();
@@ -67,7 +67,7 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void addPost() throws Exception {
+    public void testAddPost() throws Exception {
         //GIVEN
         PostRequest post  = new PostRequest();
         post.setTitle("TestAddPost");
@@ -98,7 +98,7 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void addPost_Negative() throws Exception {
+    public void testAddPost_Negative() throws Exception {
         //GIVEN
         PostRequest post  = new PostRequest();
         post.setTitle("TestAddPost");
@@ -121,7 +121,7 @@ public class BlogControllerTest {
 
 
     @Test
-    public void updatePost() throws Exception {
+    public void testUpdatePost() throws Exception {
         //GIVEN
         PostRequest post  = new PostRequest();
         post.setTitle("TestEditPost");
@@ -164,7 +164,7 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void updatePost_Negative() throws Exception {
+    public void testUpdatePost_Negative() throws Exception {
         //GIVEN
         PostRequest post  = new PostRequest();
         post.setTitle("TestEditPost");
@@ -197,7 +197,7 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void deletePost() throws Exception {
+    public void testDeletePost() throws Exception {
         //GIVEN
         PostRequest post  = new PostRequest();
         post.setTitle("TestDeletePost");
@@ -233,7 +233,7 @@ public class BlogControllerTest {
 
 
     @Test
-    public void upVote() throws Exception {
+    public void testUpVote() throws Exception {
         //GIVEN
         PostRequest post  = new PostRequest();
         post.setTitle("TestUpvotePost");
@@ -270,7 +270,7 @@ public class BlogControllerTest {
 
     }
     @Test
-    public void upVote_Negative() throws Exception {
+    public void testUpVote_Negative() throws Exception {
         //GIVEN
         PostRequest post  = new PostRequest();
         post.setTitle("TestUpvotePost");
@@ -309,7 +309,7 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void downVote() throws Exception {
+    public void testDownVote() throws Exception {
         //GIVEN
         PostRequest post  = new PostRequest();
         post.setTitle("TestDownvotePost");
@@ -349,15 +349,15 @@ public class BlogControllerTest {
 
 
     @Test
-    public void getTopPosts() throws Exception {
+    public void testGetTopPosts() throws Exception {
         //GIVEN
-        deletePosts();
-        downVote();
-        downVote();
-        upVote();
-        upVote();
-        upVote();
-        addPost();
+        testDeletePosts();
+        testDownVote();
+        testDownVote();
+        testUpVote();
+        testUpVote();
+        testUpVote();
+        testAddPost();
 
         //WHEN
         ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.get(BlogConstants.BLOG_POSTS_URL+"/top?count=5")
@@ -377,7 +377,7 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void getPosts() throws Exception {
+    public void testGetPosts() throws Exception {
         //WHEN
         ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.get(BlogConstants.BLOG_POSTS_URL)
                 .accept(MediaType.APPLICATION_JSON))
@@ -388,7 +388,7 @@ public class BlogControllerTest {
     }
 
     @Test
-    public void deletePosts() throws Exception {
+    public void testDeletePosts() throws Exception {
         //WHEN
         mvc.perform(MockMvcRequestBuilders.delete(BlogConstants.BLOG_POSTS_URL)
                 .accept(MediaType.APPLICATION_JSON)
