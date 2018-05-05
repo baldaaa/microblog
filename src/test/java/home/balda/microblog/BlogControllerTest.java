@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import home.balda.microblog.entity.Post;
 import home.balda.microblog.entity.PostId;
+import home.balda.microblog.representation.BlogErrorResponse;
 import home.balda.microblog.representation.PostRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,7 +26,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -96,6 +97,28 @@ public class BlogControllerTest {
         assertEquals(0,postResult.getRating().intValue());
     }
 
+    @Test
+    public void addPost_Negative() throws Exception {
+        //GIVEN
+        PostRequest post  = new PostRequest();
+        post.setTitle("TestAddPost");
+        String body = gson.toJson(post);
+
+        //WHEN
+        ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(BlogConstants.BLOG_POSTS_URL+"/post")
+                .header("username","addUser")
+                .content(body)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+        BlogErrorResponse error = gson.fromJson(resultActions.andReturn().getResponse().getContentAsString(),BlogErrorResponse.class);
+
+        //THEN
+        assertNotNull(error);
+        assertEquals("Bad Request",error.error);
+    }
+
+
 
     @Test
     public void updatePost() throws Exception {
@@ -138,6 +161,39 @@ public class BlogControllerTest {
         assertEquals(0,postUpdated.getRating().intValue());
 
 
+    }
+
+    @Test
+    public void updatePost_Negative() throws Exception {
+        //GIVEN
+        PostRequest post  = new PostRequest();
+        post.setTitle("TestEditPost");
+        post.setText("bla bla");
+        String body = gson.toJson(post);
+
+        ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(BlogConstants.BLOG_POSTS_URL+"/post")
+                .header("username","addUser")
+                .content(body)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        PostId postId = gson.fromJson(resultActions.andReturn().getResponse().getContentAsString(),PostId.class);
+        post.setTitle("TestEditPostUpdated");
+        post.setText(null);
+
+        //WHEN
+        ResultActions resultActions2 = mvc.perform(MockMvcRequestBuilders.put(BlogConstants.BLOG_POSTS_URL+"/post/"+postId.getId())
+                .header("username","addUser")
+                .content(gson.toJson(post))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+        BlogErrorResponse error = gson.fromJson(resultActions2.andReturn().getResponse().getContentAsString(),BlogErrorResponse.class);
+
+        //THEN
+        assertNotNull(error);
+        assertEquals("Missing mandatory parameter: text",error.errorMessage);
+        assertEquals("Bad Request",error.error);
     }
 
     @Test
@@ -212,6 +268,44 @@ public class BlogControllerTest {
         assertEquals("voteUser",postVoted.getUpvoters().get(0));
         assertEquals(1,postVoted.getRating().intValue());
 
+    }
+    @Test
+    public void upVote_Negative() throws Exception {
+        //GIVEN
+        PostRequest post  = new PostRequest();
+        post.setTitle("TestUpvotePost");
+        post.setText("bla bla");
+        String body = gson.toJson(post);
+
+        ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(BlogConstants.BLOG_POSTS_URL+"/post")
+                .header("username","voteUser")
+                .content(body)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        String postId = gson.fromJson(resultActions.andReturn().getResponse().getContentAsString(),PostId.class).getId();
+
+        //WHEN
+        mvc.perform(MockMvcRequestBuilders.post(BlogConstants.BLOG_POSTS_URL+"/post/"+postId+"/upvote")
+                .header("username","voteUser")
+                .content(body)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        //WHEN
+        ResultActions resultActions2 = mvc.perform(MockMvcRequestBuilders.post(BlogConstants.BLOG_POSTS_URL+"/post/"+postId+"/upvote")
+                .header("username","voteUser")
+                .content(body)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+        //THEN
+
+        String getResponce = resultActions2.andReturn().getResponse().getContentAsString();
+        BlogErrorResponse error = gson.fromJson(getResponce,BlogErrorResponse.class);
+        assertNotNull(error);
+        assertEquals("Bad Request",error.error);
     }
 
     @Test

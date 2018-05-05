@@ -24,4 +24,26 @@ This service will allow the following actions:
     “Top Posts” list is being asked thousands of time per second and the number of posts in the database may be very high.
 
 
+
+
 Implementation report:
+
+Implemented as Spring-boot application with spring-data and swagger2 enabled.
+Elasticsearch as persistent.
+
+Prerequisites:
+ Elasticsearch cluster with minimum configuration(application will create it's index automatically).
+ Apache Maven 3.
+
+Application configuration:
+ application.properties contains ElasticsearchTemplate client configuration(Elasticsearch cluster.name, host and port)
+
+How to run application:
+    mvn test - to execute integration tests
+    mvn package - to compile, test and package application
+    mvn spring-boot:run  - to run application
+
+How to see REST API specification and try:
+    when application is up
+    visit swagger page at http://localhost:8080/swagger-ui.html
+
