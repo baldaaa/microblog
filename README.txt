@@ -37,7 +37,8 @@ Prerequisites:
     Java 1.8
 
 Application configuration:
-    application.properties contains ElasticsearchTemplate client configuration(Elasticsearch cluster.name, host and port)
+    application.properties contains ElasticsearchTemplate client configuration
+    (Elasticsearch cluster.name, host and port)
 
 How to run application:
     mvn test - to execute integration tests
