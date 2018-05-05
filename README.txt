@@ -32,11 +32,12 @@ Implemented as Spring-boot application with spring-data and swagger2 enabled.
 Elasticsearch as persistent.
 
 Prerequisites:
- Elasticsearch cluster with minimum configuration(application will create it's index automatically).
- Apache Maven 3.
+    Elasticsearch cluster (application will create it's index automatically).
+    Apache Maven 3.
+    Java 1.8
 
 Application configuration:
- application.properties contains ElasticsearchTemplate client configuration(Elasticsearch cluster.name, host and port)
+    application.properties contains ElasticsearchTemplate client configuration(Elasticsearch cluster.name, host and port)
 
 How to run application:
     mvn test - to execute integration tests
