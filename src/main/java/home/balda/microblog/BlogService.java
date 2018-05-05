@@ -52,7 +52,9 @@ public class BlogService {
 
         UpdateQuery updateQuery = new UpdateQueryBuilder().withId(id)
                 .withClass(Post.class).withIndexRequest(indexRequest).build();
-        return elasticsearchTemplate.update(updateQuery).getId();
+        String postId =  elasticsearchTemplate.update(updateQuery).getId();
+        elasticsearchTemplate.refresh(Post.class);
+        return postId;
 
     }
 
@@ -71,7 +73,9 @@ public class BlogService {
         document.setLastModified(date);
 
         IndexQuery indexQuery = new IndexQueryBuilder().withObject(document).build();
-        return elasticsearchTemplate.index(indexQuery);
+        String postId =  elasticsearchTemplate.index(indexQuery);
+        elasticsearchTemplate.refresh(Post.class);
+        return  postId;
 
     }
 
@@ -81,10 +85,12 @@ public class BlogService {
 
     public void upvote(String id, String username) throws BlogException {
         vote(id, username, true);
+        elasticsearchTemplate.refresh(Post.class);
     }
 
     public void downvote(String id, String username) throws BlogException {
         vote(id, username, false);
+        elasticsearchTemplate.refresh(Post.class);
     }
 
     public List<Post> getTopPosts(Optional<Integer> count) {
